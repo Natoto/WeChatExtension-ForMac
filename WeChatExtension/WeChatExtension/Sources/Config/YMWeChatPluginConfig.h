@@ -64,6 +64,8 @@ typedef NS_ENUM(NSInteger, PluginLanguageType) {
 @property (nonatomic) PluginLanguageType languageType;
 @property (nonatomic, weak) MMBrandChatsViewController *brandChatsViewController;
 
+@property (nonatomic, readonly) NSString *autoReplyPlistFilePath;
+
 - (void)saveBanGroup:(YMZGMPGroupInfo *)info;
 - (void)saveBanModels;
 - (void)saveAutoReplyModels;

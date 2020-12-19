@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,10 +17,48 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="668" height="452"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
             <view key="contentView" wantsLayer="YES" id="se5-gp-TjO">
                 <rect key="frame" x="0.0" y="0.0" width="668" height="452"/>
                 <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7mp-mg-fyA">
+                        <rect key="frame" x="594" y="13" width="61" height="32"/>
+                        <buttonCell key="cell" type="push" title="导出" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BTJ-XS-RAB">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="exportbtntap:" target="-2" id="Nth-8C-MgO"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hoy-eM-Z8p">
+                        <rect key="frame" x="535" y="13" width="61" height="32"/>
+                        <buttonCell key="cell" type="push" title="导入" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vfE-g7-ZZg">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="inportbtntap:" target="-2" id="8Yn-9j-r9X"/>
+                        </connections>
+                    </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gsi-Tt-9j4">
+                        <rect key="frame" x="238" y="20" width="290" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="导入路径 ~/Download/AutoReplyModels.plist     " id="5qr-F4-khb">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="7mp-mg-fyA" secondAttribute="trailing" constant="20" symbolic="YES" id="Mp7-HE-Wtq"/>
+                    <constraint firstItem="hoy-eM-Z8p" firstAttribute="leading" secondItem="Gsi-Tt-9j4" secondAttribute="trailing" constant="16" id="USh-MU-CZ8"/>
+                    <constraint firstAttribute="bottom" secondItem="Gsi-Tt-9j4" secondAttribute="bottom" constant="20" symbolic="YES" id="dZs-q3-F8F"/>
+                    <constraint firstAttribute="bottom" secondItem="hoy-eM-Z8p" secondAttribute="bottom" constant="20" symbolic="YES" id="fFm-be-1FP"/>
+                    <constraint firstItem="7mp-mg-fyA" firstAttribute="leading" secondItem="hoy-eM-Z8p" secondAttribute="trailing" constant="12" symbolic="YES" id="fUR-RB-vFK"/>
+                    <constraint firstAttribute="bottom" secondItem="7mp-mg-fyA" secondAttribute="bottom" constant="20" symbolic="YES" id="oXX-XS-Gbi"/>
+                </constraints>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>

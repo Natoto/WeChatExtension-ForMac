@@ -912,7 +912,7 @@
         }
     }
     
-    NSArray *replyArray = [model.replyContent componentsSeparatedByString:@"|"];
+    NSArray *replyArray = @[model.replyContent];//[model.replyContent componentsSeparatedByString:@"|"];
     int index = arc4random() % replyArray.count;
     NSString *randomReplyContent = replyArray[index];
     NSInteger delayTime = model.enableDelay ? model.delayTime : 0;

@@ -125,6 +125,71 @@
                                            self.reduceButton,
                                            self.enableButton]];
 }
+//导出
+- (IBAction)exportbtntap:(id)sender {
+    
+    [[YMWeChatPluginConfig sharedConfig] saveAutoReplyModels];
+    
+    NSURL * fileBaseUrl = [[NSFileManager.defaultManager URLsForDirectory: NSDownloadsDirectory inDomains:NSUserDomainMask] firstObject];
+    NSURL *fileurl = [fileBaseUrl URLByAppendingPathComponent:@"AutoReplyModels-bak.plist"];
+    NSString * plistfilepath = [YMWeChatPluginConfig sharedConfig].autoReplyPlistFilePath;
+    if ([NSFileManager.defaultManager fileExistsAtPath:fileurl.relativePath]) {
+        [NSFileManager.defaultManager  removeItemAtPath:fileurl.relativePath error:nil];
+    }
+    [NSFileManager.defaultManager copyItemAtPath:plistfilepath toPath:fileurl.relativePath error:nil];
+    
+    NSAlert * alert = ({
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert addButtonWithTitle:@"知道了"];
+        [alert setMessageText:@"已导出至Download文件夹"];
+        alert;
+    });
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == NSAlertFirstButtonReturn) {
+            
+        }
+    }];
+}
+//导入
+- (IBAction)inportbtntap:(id)sender {
+    
+    NSURL * fileBaseUrl = [[NSFileManager.defaultManager URLsForDirectory: NSDownloadsDirectory inDomains:NSUserDomainMask] firstObject];
+    NSURL *fileurl = [fileBaseUrl URLByAppendingPathComponent:@"AutoReplyModels.plist"];
+    NSString * filepath = fileurl.relativePath ;
+    NSArray* uploadarray = [NSArray arrayWithContentsOfFile:filepath];
+    NSMutableArray * willaddarray = [NSMutableArray new];
+    
+    if (![NSFileManager.defaultManager fileExistsAtPath:filepath]) {
+        NSAlert * alert = ({
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert addButtonWithTitle:@"知道了"];
+            [alert setMessageText:@"~/Download/AutoReplyModels.plist 文件不存在，请检查"];
+            alert;
+        });
+        [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+            
+        }];
+        return;
+    }
+    [self.autoReplyModels removeAllObjects];
+    [uploadarray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
+        YMAutoReplyModel *model = [[YMAutoReplyModel alloc] initWithDict:item];
+        [willaddarray addObject:model];
+        [self.autoReplyModels addObject:model];
+    }];
+   
+    NSAlert * alert = ({
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert addButtonWithTitle:@"知道了"];
+        [alert setMessageText:@"已导入！！"];
+        alert;
+    });
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == NSAlertFirstButtonReturn) {
+            [self.tableView reloadData];
+        }
+    }];
+}
 
 - (void)setup
 {

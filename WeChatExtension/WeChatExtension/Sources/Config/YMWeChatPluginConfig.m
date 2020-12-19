@@ -75,7 +75,28 @@ static NSString * const kTKWeChatRemotePlistPath = @"https://raw.githubuserconte
 - (NSArray *)autoReplyModels
 {
     if (!_autoReplyModels) {
-        _autoReplyModels = [self getModelsWithClass:[YMAutoReplyModel class] filePath:self.autoReplyPlistFilePath];
+        NSMutableArray<YMAutoReplyModel *> * array = [self getModelsWithClass:[YMAutoReplyModel class] filePath:self.autoReplyPlistFilePath];
+        YMAutoReplyModel * model = [YMAutoReplyModel new];
+        model.enableGroupReply = YES;
+        model.enableSingleReply = YES;
+        model.enable = YES;
+        model.keyword = @"streamKeywords";
+        __block NSString * msg = @"自动回复机器人支持如下关键字:\n";
+        __block NSUInteger keywdIdx= -1;
+        [array enumerateObjectsUsingBlock:^(YMAutoReplyModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj.keyword isEqualToString:model.keyword]) {
+                keywdIdx = idx;
+            }
+        }];
+        if (keywdIdx != -1) {
+            [array removeObjectAtIndex:keywdIdx];
+        }
+        [array enumerateObjectsUsingBlock:^(YMAutoReplyModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            msg = [msg stringByAppendingFormat:@"%lu.  %@ \n",1+idx,obj.keyword];
+        }];
+        model.replyContent = msg;
+        [array addObject:model];
+        _autoReplyModels = array;
     }
     return _autoReplyModels;
 }
