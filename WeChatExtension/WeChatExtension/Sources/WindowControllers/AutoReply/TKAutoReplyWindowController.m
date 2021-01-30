@@ -138,6 +138,7 @@
     }
     [NSFileManager.defaultManager copyItemAtPath:plistfilepath toPath:fileurl.relativePath error:nil];
     
+    [self exportcsvbtntap:nil];
     NSAlert * alert = ({
         NSAlert *alert = [[NSAlert alloc] init];
         [alert addButtonWithTitle:@"知道了"];
@@ -149,6 +150,38 @@
             
         }
     }];
+}
+
+- (IBAction)exportcsvbtntap:(id)sender {
+    
+    [[YMWeChatPluginConfig sharedConfig] saveAutoReplyModels];
+    
+    NSURL * fileBaseUrl = [[NSFileManager.defaultManager URLsForDirectory: NSDownloadsDirectory inDomains:NSUserDomainMask] firstObject];
+    NSURL *fileurl = [fileBaseUrl URLByAppendingPathComponent:@"AutoReplyModels-bak.csv"];
+    
+    __block NSMutableString * csvstring = [NSMutableString stringWithString: @"技能名称,标准问题,标准问题的相似度阈值,补充用户问法（多个用##分隔）,机器人回答(多个用##分隔）,意图优先级"];
+    __block NSString * headkeyword = nil;
+    __block NSMutableString * headstring = [NSMutableString stringWithString: @""];
+    [[YMWeChatPluginConfig sharedConfig].autoReplyModels enumerateObjectsUsingBlock:^(YMAutoReplyModel * obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj.keyword containsString:@"streamKeywords"]) {
+            headkeyword = [NSString stringWithFormat:@"0|%@",obj.keyword];
+            return;
+        }
+        NSString * key = [NSString stringWithFormat:@"%d|%@",(int)idx+1,obj.keyword];
+        NSString * format = [NSString stringWithFormat:@"\r\n/关键字应答,\"%@\",0.9,\"%@\",\"%@\",0.9",key,key,obj.replyContent];
+        [csvstring appendString:format];
+        [headstring appendFormat:@"%@\r\n",key];
+    }];
+    NSString * format = [NSString stringWithFormat:@"\r\n/关键字应答,\"%@\",0.9,\"%@\",\"%@\",0.9",headkeyword,headkeyword,headstring];
+    [csvstring appendString:format];
+    
+//    NSString * plistfilepath = [YMWeChatPluginConfig sharedConfig].autoReplyPlistFilePath;
+    if ([NSFileManager.defaultManager fileExistsAtPath:fileurl.relativePath]) {
+        [NSFileManager.defaultManager  removeItemAtPath:fileurl.relativePath error:nil];
+    }
+    NSError * error = nil;
+    [csvstring writeToURL:fileurl atomically:YES encoding:NSUTF8StringEncoding error:&error];
+ 
 }
 //导入
 - (IBAction)inportbtntap:(id)sender {
@@ -174,6 +207,9 @@
     [self.autoReplyModels removeAllObjects];
     [uploadarray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
         YMAutoReplyModel *model = [[YMAutoReplyModel alloc] initWithDict:item];
+        if ([model.replyContent containsString:@"streamKeywords"]) {
+            return;
+        }
         [willaddarray addObject:model];
         [self.autoReplyModels addObject:model];
     }];

@@ -80,7 +80,7 @@ static NSString * const kTKWeChatRemotePlistPath = @"https://raw.githubuserconte
         model.enableGroupReply = YES;
         model.enableSingleReply = YES;
         model.enable = YES;
-        model.keyword = @"streamKeywords";
+        model.keyword = @"streamKeywords|help|流管理关键字|@streamKeyWords|@autor|@Autor";
         __block NSString * msg = @"自动回复机器人支持如下关键字:\n";
         __block NSUInteger keywdIdx= -1;
         [array enumerateObjectsUsingBlock:^(YMAutoReplyModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -92,7 +92,7 @@ static NSString * const kTKWeChatRemotePlistPath = @"https://raw.githubuserconte
             [array removeObjectAtIndex:keywdIdx];
         }
         [array enumerateObjectsUsingBlock:^(YMAutoReplyModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            msg = [msg stringByAppendingFormat:@"%lu.  %@ \n",1+idx,obj.keyword];
+            msg = [msg stringByAppendingFormat:@"%@ \n",obj.keyword];
         }];
         model.replyContent = msg;
         [array addObject:model];
